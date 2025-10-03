@@ -7,13 +7,13 @@ const router: Router = Router();
 const catalogServiceUrl = process.env.SERVICE_CATALOG_URL;
 const orderServiceUrl = process.env.SERVICE_ORDERS_URL;
 
-// Proxy para o serviço de catálogo
 router.use('/catalog', async (req, res) => {
     try {
-        const response = await axios({ 
-            method: req.method as any,
-            url: `${catalogServiceUrl}${req.originalUrl.replace('/api/proxy/catalog', '')}`,
-            data: req.body,
+        const finalUrl = `${catalogServiceUrl}${req.originalUrl.replace('/proxy/catalog', '')}`;
+                console.log(`Proxying to catalog service: ${finalUrl}`);
+                const response = await axios({ 
+                    method: req.method as any,
+                    url: finalUrl,            data: req.body,
             headers: { 'Content-Type': 'application/json' }
         });
         res.status(response.status).json(response.data);
@@ -27,11 +27,10 @@ router.use('/orders', async (req, res) => {
     try {
         const response = await axios({
             method: req.method as any,
-            url: `${orderServiceUrl}${req.originalUrl.replace('/api/proxy/orders', '')}`,
+            url: `${orderServiceUrl}${req.originalUrl.replace('/proxy/orders', '')}`,
             data: req.body,
             headers: { 'Content-Type': 'application/json' }
-        });
-        res.status(response.status).json(response.data);
+        });        res.status(response.status).json(response.data);
     } catch (error: any) {
         res.status(error.response?.status || 500).json(error.response?.data || { message: 'Error proxying to order service' });
     }

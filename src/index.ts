@@ -1,18 +1,19 @@
 
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
+import proxyRouter from './routes/proxy.js';
+import aggregationRouter from './routes/aggregation.js';
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
 const port = process.env.PORT || 8080;
-
-import proxyRouter from './routes/proxy';
-import aggregationRouter from './routes/aggregation';
 
 app.use(express.json());
 
-app.use('/api/proxy', proxyRouter);
+app.use('/proxy', proxyRouter);
 app.use('/api', aggregationRouter);
 
 app.get('/api/health', (req, res) => {
