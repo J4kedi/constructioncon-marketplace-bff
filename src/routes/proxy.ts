@@ -13,7 +13,9 @@ router.use('/catalog', async (req, res) => {
                 console.log(`Proxying to catalog service: ${finalUrl}`);
                 const response = await axios({ 
                     method: req.method as any,
-                    url: finalUrl,            data: req.body,
+                    url: finalUrl,
+            params: req.query,
+            data: req.body,
             headers: { 'Content-Type': 'application/json' }
         });
         res.status(response.status).json(response.data);
@@ -22,7 +24,6 @@ router.use('/catalog', async (req, res) => {
     }
 });
 
-// Proxy para o serviço de pedidos
 router.use('/orders', async (req, res) => {
     try {
         const response = await axios({

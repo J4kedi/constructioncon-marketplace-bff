@@ -16,8 +16,8 @@ app.use(express.json());
 app.use('/proxy', proxyRouter);
 app.use('/api', aggregationRouter);
 
-app.get('/api/health', (req, res) => {
-    res.status(200).json({ status: 'BFF is running' });
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok' });
 });
 
 app.listen(port, () => {
